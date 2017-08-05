@@ -15,8 +15,6 @@ class Log {
 
 	function __construct($name) {
 		$logger = new Logger('name');
-
-		$logger->pushHandler(new RotatingFileHandler('logs/' . $name . '/' . $name . '.log'));
 	}
 
 	public static function stream($name) {
@@ -25,5 +23,9 @@ class Log {
 		}
 
 		return self::$instance[$name];
+	}
+
+	public static function setDefaultRotation($name) {
+		self::stream($name)->pushHandler(new RotatingFileHandler('logs/' . $name . '/' . $name . '.log'));
 	}
 }
