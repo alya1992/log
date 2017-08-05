@@ -13,13 +13,11 @@ class Log {
 
 	private static $instance;
 
-	function __construct($name) {
-		$logger = new Logger('name');
-	}
+	function __construct() {}
 
 	public static function stream($name) {
 		if (!isset(self::$instance[$name])) {
-			self::$instance[$name] = new self($name);
+			self::$instance[$name] = new Logger('name');
 		}
 
 		return self::$instance[$name];
