@@ -25,7 +25,7 @@ class Log {
 		return self::$instance[$name];
 	}
 
-	public static function setDefaultRotation($name) {
+	public static function setDefaultRotationHandler($name) {
 		self::stream($name)->pushHandler(new RotatingFileHandler('logs/' . $name . '/' . $name . '.log'));
 	}
 }
