@@ -2,7 +2,10 @@
 namespace memCrab\Log;
 
 use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\SqsHandler;
 use Monolog\Logger;
+use Aws\Sqs\SqsClient;
+
 
 /**
  *  Log for core project
@@ -25,5 +28,9 @@ class Log {
 
 	public static function setDefaultRotationHandler($name) {
 		self::stream($name)->pushHandler(new RotatingFileHandler('logs/' . $name . '/' . $name . '.log'));
+	}
+
+	public static function setSqsHandler(SqsClient $sqsClient, $queueUrl, $name) {
+		self::stream($name)->pushHandler(new SqsHandler($sqsClient, $queueUrl));
 	}
 }
