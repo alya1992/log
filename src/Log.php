@@ -39,6 +39,6 @@ class Log {
                     'secret' => $secret,
                 )];
 		$sqsClient = new SqsClient($config);
-		$test = self::stream($name)->pushHandler(new SqsHandler($sqsClient, $queueUrl));
+		self::stream($name)->pushHandler(new SqsHandler($sqsClient, $queueUrl));
 	}
 }
