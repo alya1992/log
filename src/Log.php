@@ -30,15 +30,7 @@ class Log {
 		self::stream($name)->pushHandler(new RotatingFileHandler('logs/' . $name . '/' . $name . '.log'));
 	}
 
-	public static function setSqsHandler(string $region, string $key, string $secret, string $version, $queueUrl, $name) {
-		$config = [
-                'region' => $region,
-                'version' => $version,
-                'credentials' => array(
-                    'key' => $key,
-                    'secret' => $secret,
-                )];
-		$sqsClient = new SqsClient($config);
+	public static function setSqsHandler(SqsClient $sqsClient, $queueUrl, $name) {
 		self::stream($name)->pushHandler(new SqsHandler($sqsClient, $queueUrl));
 	}
 }
