@@ -29,7 +29,9 @@ class Log {
         self::stream($name)->pushHandler(new RotatingFileHandler('logs/' . $name . '/' . $name . '.log'));
     }
 
-    public static function setSqsHandler(SqsClient $sqsClient, $queueUrl, $name) {
-        self::stream($name)->pushHandler(new SqsHandler($sqsClient, $queueUrl));
-    }
+	public static function setSqsHandler(SqsClient $sqsClient, $queueUrl, $name) {
+		$stream = new SqsHandler($sqsClient, $queueUrl);
+		$stream->setFormatter(new JsonFormatter());
+		self::stream($name)->pushHandler($stream);
+	}
 }
