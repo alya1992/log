@@ -31,6 +31,8 @@ class Log {
 	}
 
 	public static function setSqsHandler(SqsClient $sqsClient, $queueUrl, $name) {
-		self::stream($name)->pushHandler(new SqsHandler($sqsClient, $queueUrl));
+		$stream = new SqsHandler($sqsClient, $queueUrl);
+		$stream->setFormatter(new JsonFormatter());
+		self::stream($name)->pushHandler($stream);
 	}
 }
