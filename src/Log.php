@@ -4,6 +4,7 @@ namespace memCrab\Log;
 use Aws\Sqs\SqsClient;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\SqsHandler;
+use Monolog\Formatter\JsonFormatter;
 use Monolog\Logger;
 
 /**
