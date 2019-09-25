@@ -2,10 +2,12 @@
 namespace memCrab\Log;
 
 use Aws\Sqs\SqsClient;
+use Monolog\Formatter\JsonFormatter;
+use Monolog\Handler\AmqpHandler;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\SqsHandler;
-use Monolog\Formatter\JsonFormatter;
 use Monolog\Logger;
+use PhpAmqpLib\Channel\AMQPChannel;
 
 /**
  *  Log for core project
@@ -35,4 +37,10 @@ class Log {
 		$stream->setFormatter(new JsonFormatter());
 		self::stream($name)->pushHandler($stream);
 	}
+	
+	public static function setAmqpHandler(AMQPChannel $channel, $exchangeName, $name) {
+        $stream = new AmqpHandler($channel, $exchangeName);
+        $stream->setFormatter(new JsonFormatter());
+        self::stream($name)->pushHandler($stream);
+    }
 }
