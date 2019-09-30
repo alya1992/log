@@ -17,6 +17,7 @@ use PhpAmqpLib\Channel\AMQPChannel;
 class Log {
 
     private static $instance;
+    private static $context = [];
 
     function __construct() {}
 
@@ -28,17 +29,25 @@ class Log {
         return self::$instance[$name];
     }
 
+    public static function error($name, $message) {
+        self::$instance[$name]->error($message, self::$context);
+    }
+
+    public static function setContext(array $context) {
+        self::$context = $context;
+    }
+
     public static function setDefaultRotationHandler($name) {
         self::stream($name)->pushHandler(new RotatingFileHandler('logs/' . $name . '/' . $name . '.log'));
     }
 
-	public static function setSqsHandler(SqsClient $sqsClient, $queueUrl, $name) {
-		$stream = new SqsHandler($sqsClient, $queueUrl);
-		$stream->setFormatter(new JsonFormatter());
-		self::stream($name)->pushHandler($stream);
-	}
-	
-	public static function setAmqpHandler(AMQPChannel $channel, $exchangeName, $name) {
+    public static function setSqsHandler(SqsClient $sqsClient, $queueUrl, $name) {
+        $stream = new SqsHandler($sqsClient, $queueUrl);
+        $stream->setFormatter(new JsonFormatter());
+        self::stream($name)->pushHandler($stream);
+    }
+
+    public static function setAmqpHandler(AMQPChannel $channel, $exchangeName, $name) {
         $stream = new AmqpHandler($channel, $exchangeName);
         $stream->setFormatter(new JsonFormatter());
         self::stream($name)->pushHandler($stream);
